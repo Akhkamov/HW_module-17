@@ -1,24 +1,40 @@
-print("Введите последовательность чисел через пробел:")
-array = input()
-print("Введите любое целое число:")
-num = input()
+raw = input('Введите список целых чисел через пробел: ')
+num = input('Введите целое число: ')
+list_of_numbers = list(map(int, raw.split(' ')))
+value = int(num)
 
-while True:
-    list_1 = list(map(int, array.split(' '))) #удаляем пробелы, приводим к целым числам
-    num_1 = int(num) #приводим введенное пользователем число к целому
+def sort(array):
+    for i in range(len(array)):
+        for j in range(len(array)-i-1):
+            if array[j] > array[j+1]:
+                array[j], array[j+1] = array[j+1], array[j]
+    return array
 
-#алгоритм двоичного поиска
-def binary_search(list_1, num_1, left, right):
-    if left > right:  # если левая граница превысила правую,
-        return False  # значит элемент отсутствует
-
-    middle = (right + left) // 2  # находимо середину
-    if list_1[middle] == num_1:  # если элемент в середине,
-        return middle  # возвращаем этот индекс
-    elif num_1 < list_1[middle]:  # если элемент меньше элемента в середине
-        # рекурсивно ищем в левой половине
-        return binary_search(list_1, num_1, left, middle - 1)
-    else:  # иначе в правой
-        return binary_search(list_1, num_1, middle + 1, right)
-
-print(binary_search(list_1, num_1, 0, 99))
+def binary_search(array, element, left, right):
+    if left > right:
+        return False
+    middle = (right + left) // 2
+    if array[middle] == element:
+        x = array[: middle]
+        for i in x:
+            if i == element:
+                x.remove(element)
+        index_left = (len(x) - 1)
+        y = array[middle:]
+        for n in y:
+            if n <= element and len(y) > 1:
+                y.remove(n)
+        f = y[0]
+        index_right = array.index(f)
+        if index_left < 0:
+            print('Это первый элемент списка. Индекс большего числа справа =', index_right)
+        elif index_right == len(array) - 1:
+            print(f'Индекс меньшего числа слева = {index_left}. Это последний элемент списка')
+        else:
+            print(f'Индекс меньшего числа слева = {index_left}. Индекс большего числа справа = {index_right}')
+        return index_left, index_right
+    elif element < array[middle]:
+        return binary_search(array, element, left, middle - 1)
+    else:
+        return binary_search(array, element, middle + 1, right)
+print(list_of_numbers)
